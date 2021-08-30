@@ -5,7 +5,7 @@ Solved LeetCode challenges
 | Collection | Title | Solution | Time | Space | Difficulty |
 | --- | --- | --- | --- | --- | --- |
 | Array | [Remove Duplicates from Sorted Array](https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/727/) | [C](https://github.com/rogermiranda1000/LeetCode/tree/master/C/RemoveDuplicatesSorted.c) | O(n) | O(1) | Easy |
-| Array | [Best Time to Buy and Sell Stock II](https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/564/) | - | - | - | Easy |
+| Array | [Best Time to Buy and Sell Stock II](https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/564/) | [C](https://github.com/rogermiranda1000/LeetCode/tree/master/C/StockSeller.c) | O(2^n) | O(1) | Easy |
 | Array | [Rotate Array](https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/646/) | - | - | - | Easy |
 | Array | [Contains Duplicate](https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/578/) | - | - | - | Easy |
 | Array | [Single Number](https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/549/) | - | - | - | Easy |
