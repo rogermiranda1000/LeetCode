@@ -1,6 +1,42 @@
 class Solution {
+    class SolutionInstance {
+        public int index;
+        public int acumulated;
+        public int buyPrice;
+        public boolean isBuying;
+        
+        public SolutionInstance(int index, int acumulated, int buyPrice, boolean isBuying) {
+            this.index = index;
+            this.acumulated = acumulated;
+            this.buyPrice = buyPrice;
+            this.isBuying = isBuying;
+        }
+    }
+    
     public int maxProfit(int[] prices) {
-        return maxProfit(prices, 0, 0, 0, true);
+        PriorityQueue<SolutionInstance> numbers = new PriorityQueue<>((a,b)->Integer.compare(a.acumulated, b.acumulated));
+        numbers.add(new SolutionInstance(0,0,0,true)); // default one
+        
+        int max = 0;
+        while (!numbers.isEmpty()) {
+            SolutionInstance current = numbers.remove();
+            
+            if (prices.length-current.index == 0) {
+                max = Math.max(max, current.acumulated);
+                continue;
+            }
+            if (evaluate(prices, current.index, current.acumulated, current.isBuying) < max) continue; // no hope here...
+
+            numbers.add(new SolutionInstance(current.index+1, current.acumulated, current.buyPrice, current.isBuying));
+
+            if (current.isBuying) numbers.add(new SolutionInstance(current.index+1, current.acumulated-prices[current.index], prices[current.index], false));
+            else {
+                // only sell if greater than the buy price
+                if (prices[current.index] > current.buyPrice) numbers.add(new SolutionInstance(current.index+1, current.acumulated+prices[current.index], prices[current.index], true));
+            }
+        }
+        
+        return max;
     }
     
     /**
@@ -28,20 +64,5 @@ class Solution {
         }
         
         return acumulated;
-    }
-    
-    private int maxProfit(int[] prices, int index, int acumulated, int buyPrice, boolean isBuying) {
-        if (prices.length-index == 0) return acumulated;
-        //if (evaluate(prices, index, acumulated, isBuying) < 0) return acumulated; // no hope here...
-
-        int resultPick = 0, resultIgnore = maxProfit(prices, index+1, acumulated, buyPrice, isBuying);
-
-        if (isBuying) resultPick = maxProfit(prices, index+1, acumulated-prices[index], prices[index], false);
-        else {
-            // only sell if greater than the buy price
-            if (prices[index] > buyPrice) resultPick = maxProfit(prices, index+1, acumulated+prices[index], prices[index], true);
-        }
-
-        return Math.max(Math.max(resultPick, resultIgnore), 0 /* do nothing (don't buy anything) */);
     }
 }
