@@ -13,6 +13,28 @@ class Solution {
         }
     }
     
+    class Evaluation {
+        private int index;
+        private boolean isBuying;
+        
+        public Evaluation(int index, boolean isBuying) {
+            this.index = index;
+            this.isBuying = isBuying;
+        }
+        
+        @Override
+        public boolean equals(Object o) {
+            if (o == null || !(o instanceof Evaluation)) return false;
+            Evaluation that = (Evaluation)o;
+            return this.index == that.index && this.isBuying == that.isBuying;
+        }
+
+        @Override
+        public int hashCode() {
+            return index*2 + (isBuying ? 1 : 0);
+        }
+    }
+    
     public int maxProfit(int[] prices) {
         PriorityQueue<SolutionInstance> numbers = new PriorityQueue<>((a,b)->Integer.compare(a.acumulated, b.acumulated));
         numbers.add(new SolutionInstance(0,0,0,true)); // default one
@@ -39,30 +61,39 @@ class Solution {
         return max;
     }
     
+    private HashMap<Evaluation,Integer> cache = new HashMap<>();
+    
     /**
      * It predicts the price in best-case (buy while cheaper, sell while expensive)
      * PRE: index < prices.length
-     * O(n*log(n))
+     * O(n*log(n)) if not cache; O(1) otherwise
      */
     private int evaluate(int[] prices, int index, int acumulated, boolean isBuying) {
-        // TODO pre-sort
-        int []sorted = Arrays.copyOfRange(prices, index, prices.length);
-        Arrays.sort(sorted); // O(n*log(n))
+        Evaluation search = new Evaluation(index, isBuying);
         
-        int first = 0, last = sorted.length-1;
-        // O(n)
-        while (first < last || (first == last && !isBuying) /* if they're odd only use it if the last is selling */) {
-            if (isBuying) {
-                acumulated -= sorted[first];
-                first++;
+        Integer result = cache.get(search); // result from the current position to the last
+        if (result == null) {
+            int []sorted = Arrays.copyOfRange(prices, index, prices.length);
+            Arrays.sort(sorted); // O(n*log(n))
+            
+            result = 0;
+            int first = 0, last = sorted.length-1;
+            // O(n)
+            while (first < last || (first == last && !isBuying) /* if they're odd only use it if the last is selling */) {
+                if (isBuying) {
+                    result -= sorted[first];
+                    first++;
+                }
+                else {
+                    result += sorted[last];
+                    last--;
+                }
+                isBuying = !isBuying;
             }
-            else {
-                acumulated += sorted[last];
-                last--;
-            }
-            isBuying = !isBuying;
+            
+            cache.put(search, result);
         }
         
-        return acumulated;
+        return result+acumulated;
     }
 }
