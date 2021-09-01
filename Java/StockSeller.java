@@ -26,7 +26,8 @@ class Solution {
         public boolean equals(Object o) {
             if (o == null || !(o instanceof Evaluation)) return false;
             Evaluation that = (Evaluation)o;
-            return this.index == that.index && this.isBuying == that.isBuying;
+            //return this.index == that.index && this.isBuying == that.isBuying;
+            return this.hashCode() == that.hashCode();
         }
 
         @Override
@@ -35,9 +36,12 @@ class Solution {
         }
     }
     
+    private HashMap<Evaluation,Integer> cache;
+    
     public int maxProfit(int[] prices) {
         PriorityQueue<SolutionInstance> numbers = new PriorityQueue<>((a,b)->Integer.compare(a.acumulated, b.acumulated));
         numbers.add(new SolutionInstance(0,0,0,true)); // default one
+        cache = new HashMap<>();
         
         int max = 0;
         while (!numbers.isEmpty()) {
@@ -60,8 +64,6 @@ class Solution {
         
         return max;
     }
-    
-    private HashMap<Evaluation,Integer> cache = new HashMap<>();
     
     /**
      * It predicts the price in best-case (buy while cheaper, sell while expensive)
