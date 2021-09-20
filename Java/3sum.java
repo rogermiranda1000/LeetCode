@@ -12,7 +12,8 @@ class Solution {
                     current.add(nums[y]);
                     current.add(nums[z]);
                     Collections.sort(current);
-                    values.add(current); // it will check for equal values
+                    values.add(current); // it will check for equal values; O(1)
+                    break; // if there's more, they will be just repeated
                 }
             }
         }
