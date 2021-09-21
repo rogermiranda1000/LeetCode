@@ -24,4 +24,5 @@ Solved LeetCode challenges
 | Design | ... | - | - | - | Easy |
 | Math | ... | - | - | - | Easy |
 | Others | ... | - | - | - | Easy |
-| Others | [3sum](https://leetcode.com/problems/3sum/) | [Java](https://github.com/rogermiranda1000/LeetCode/tree/master/Java/3sum.c) | O(n^2*log(n)) | O(n) | Medium |
+| Others | [3sum](https://leetcode.com/problems/3sum/) | [Java](https://github.com/rogermiranda1000/LeetCode/tree/master/Java/3sum.java) | O(n^2*log(n)) | O(n) | Medium |
+| Others | [strStr](https://leetcode.com/problems/implement-strstr/) | [C](https://github.com/rogermiranda1000/LeetCode/tree/master/C/strStr.c) | O(n) | O(1) | Easy |
