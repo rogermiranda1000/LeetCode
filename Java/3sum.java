@@ -11,7 +11,7 @@ class Solution {
         }
         
         Collections.sort(positive);
-        Collections.sort(negative, Collections.reverseOrder()); // we want [-1, -2, ...]
+        Collections.sort(negative);
         
         
         /** At this point we have all the positive values on the 'positive' list,
@@ -73,10 +73,13 @@ class Solution {
      */
     void combine(LinkedHashSet<ArrayList<Integer>> values, ArrayList<Integer> oneList, ArrayList<Integer> twoList) {
         boolean twoListIsNegative = (twoList.size() > 0) && (twoList.get(0) < 0);
-        for (int index1 = 0; index1 < oneList.size(); index1++) {
+        
+        // if negative it's oredered [-2,-1,...] but we want [-1,-2,...]
+        for (int index1 = (twoListIsNegative ? 0 : oneList.size()-1); index1 >= 0 && index1 < oneList.size(); index1 += (twoListIsNegative ? 1 : -1)) {
             int e1 = oneList.get(index1);
             
-            for (int index2 = 0; index2 < twoList.size(); index2++) {
+            // if negative it's oredered [-2,-1,...] but we want [-1,-2,...]
+            for (int index2 = (twoListIsNegative ? twoList.size()-1 : 0); index2 >= 0 && index2 < twoList.size(); index2 += (twoListIsNegative ? -1 : 1)) {
                 // e3+e1+e2 = 0 -> e3 = -e1-e2
                 int e3 = -e1-twoList.get(index2);
                 
