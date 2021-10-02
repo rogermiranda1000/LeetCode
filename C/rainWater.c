@@ -1,12 +1,3 @@
-// O(n) time, O(1) space
-int getMaxValue(int* height, int heightSize) {
-    int max = 0;
-    for (int x=0; x<heightSize; x++) {
-        if (height[x] > max) max = height[x];
-    }
-    return max;
-}
-
 // It optimizes the input parameters by removing the borders that will lead to leaking water
 // O(n) time, O(1) space
 void removeBorders(int **height, int *heightSize) {
@@ -16,35 +7,28 @@ void removeBorders(int **height, int *heightSize) {
         (*heightSize)--;
     }
     while (*heightSize >= 2 && (*height)[*heightSize-1] <= (*height)[*heightSize-2]) (*heightSize)--;
-    if (*heightSize == 1) *heightSize = 0; // just a pilar; no water
 }
 
 int trap(int* height, int heightSize) {
     removeBorders(&height, &heightSize);
     
-    int maxVal = getMaxValue(height, heightSize);
-    int water = 0, tmpWater;
-    // O(n*m) time, O(1) space; n being heightSize, m being maxVal
-    for (int row = maxVal; row >= 1; row++) {
-        bool filling = false;
-        for (int x = 0; x < heightSize; x++) {
-            if (filling) {
-                // filling -> increment counter and if next is higher stop filling
-                tmpWater++;
-                if (x+1 < heightSize && height[x+1] >= row) {
-                    filling = false;
-                    water += tmpWater;
-                }
-            }
-            else {
-                // not filling -> check if this spot is higher and the next spot is empty
-                if (height[x] >= row && x+1 < heightSize && height[x+1] < row) {
-                    filling = true;
-                    tmpWater = 0;
-                }
-            }
+    int water = 0;
+    while (heightSize > 2) {
+        int ray = height[0], tmpWater = 0;
+        int x = 1;
+        while (x < heightSize && height[x] < ray) {
+            tmpWater += ray-height[x];
+            x++;
         }
+
+        if (x < heightSize) {
+            // something hit the ray -> add water and remove that section
+            water += tmpWater;
+            heightSize -= x;
+            height += x;
+            removeBorders(&height, &heightSize);
+        }
+        else height[0]--; // try again with a lower height
     }
-    
     return water;
 }
