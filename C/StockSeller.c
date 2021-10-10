@@ -1,20 +1,33 @@
-int maxProfitRecursive(int* prices, int pricesSize, int buyPrice, bool isBuying);
-
-int maxProfit(int* prices, int pricesSize) {
-    return maxProfitRecursive(prices, pricesSize, 0, true); // default
+/**
+ * Given an end downhill it gets removed
+ */
+void removeBorders(int **prices, int *pricesSize) {
+    /*while (*pricesSize >= 2 && (*prices)[0]>(*prices)[1]) {
+        *prices++;
+        (*pricesSize)--;
+    }*/
+    
+    while (*pricesSize >= 2 && (*prices)[*pricesSize-2]>=(*prices)[*pricesSize-1]) (*pricesSize)--;
 }
 
-int maxProfitRecursive(int* prices, int pricesSize, int buyPrice, bool isBuying) {
-    if (pricesSize == 0) return 0;
+int maxProfit(int* prices, int pricesSize) {
+    int r = 0;
+    bool buying = true;
     
-    int resultPick = 0, resultIgnore = maxProfitRecursive(prices+1, pricesSize-1, buyPrice, isBuying);
+    removeBorders(&prices, &pricesSize);
     
-    if (!isBuying) {
-        // only sell if greater than the buy price
-        if (prices[0] > buyPrice) resultPick = maxProfitRecursive(prices+1, pricesSize-1, prices[0], true) + prices[0];
+    for (int x = 0; x < pricesSize; x++) {
+        if (buying) {
+            while (x+1 < pricesSize && prices[x]>=prices[x+1]) x++;
+            buying = false;
+            r -= prices[x];
+        }
+        else {
+            while (x+1 < pricesSize && prices[x]<=prices[x+1]) x++;
+            buying = true;
+            r += prices[x];
+        }
     }
-    else resultPick = maxProfitRecursive(prices+1, pricesSize-1, prices[0], false) - prices[0];
     
-    int result = (resultPick > resultIgnore) ? resultPick : resultIgnore;
-    return (result > 0) ? result : 0 /* do nothing */;
+    return r>0 ? r : 0;
 }
